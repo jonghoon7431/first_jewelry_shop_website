@@ -2,21 +2,40 @@
 // product.html
 const slidePrevBtn = document.querySelector(".prev_button");
 const slideNextBtn = document.querySelector(".next_button");
+const imgSlide = document.querySelector(".slide_img");
 
-let slideImg = ["images/black300px.png", "images/white300px.png"];
-let currentIndex = 0;
+let page = 0; //인덱스
+let positionValue = 0; //이미지 위치값
+const TRANSFERVALUE = 300; //위치 이동 값
 
-slideNextBtn.addEventListener("click", () => {
-  let img = document.getElementById("slide_img");
-  currentIndex = (currentIndex + 1) % slideImg.length;
-  img.src = `./${slideImg[currentIndex]}`;
-});
+function next() {
+  if (page < 1) {
+    slidePrevBtn.removeAttribute("disabled");
+    positionValue -= TRANSFERVALUE;
+    imgSlide.style.transform = `translateX(${positionValue}px)`;
+    page += 1;
+  }
+  if (page === 1) {
+    slideNextBtn.setAttribute("disabled", "true");
+  }
+}
 
-slidePrevBtn.addEventListener("click", () => {
-  let img = document.getElementById("slide_img");
-  currentIndex = (currentIndex - 1 + slideImg.length) % slideImg.length;
-  img.src = `./${slideImg[currentIndex]}`;
-});
+function back() {
+  if (page > 0) {
+    slideNextBtn.removeAttribute("disabled");
+    positionValue += TRANSFERVALUE;
+    imgSlide.style.transform = `translateX(${positionValue}px)`;
+    page -= 1;
+  }
+  if (page === 0) {
+    slidePrevBtn.setAttribute("disabled", "true");
+  }
+}
 
-//모든 버튼이 동일 작동 하게 만들 방법
-//좌우 이동 드래그 슬라이더 생성
+function init() {
+  slidePrevBtn.setAttribute("disabled", "true");
+
+  slidePrevBtn.addEventListener("click", back);
+  slideNextBtn.addEventListener("click", next);
+}
+init();
